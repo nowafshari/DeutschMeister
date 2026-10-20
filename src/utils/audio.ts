@@ -48,6 +48,46 @@ class SoundEngine {
     this.speechRate = rate;
   }
 
+  public setSelectedVoiceURI(voiceURI: string | null) {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    if (!voiceURI) {
+      this.initGermanVoice();
+      return;
+    }
+    const voices = window.speechSynthesis.getVoices();
+    const found = voices.find(v => v.voiceURI === voiceURI);
+    if (found) {
+      this.cachedGermanVoice = found;
+    } else {
+      this.initGermanVoice();
+    }
+  }
+
+  public getAvailableGermanVoices(): SpeechSynthesisVoice[] {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return [];
+    const voices = window.speechSynthesis.getVoices();
+    return voices.filter(v => 
+      v.lang === 'de-DE' || 
+      v.lang === 'de_DE' || 
+      v.lang.startsWith('de') || 
+      v.name.toLowerCase().includes('german') || 
+      v.name.toLowerCase().includes('deutsch')
+    );
+  }
+
+  public getActiveVoice(): SpeechSynthesisVoice | null {
+    if (!this.cachedGermanVoice) {
+      this.initGermanVoice();
+    }
+    return this.cachedGermanVoice;
+  }
+
+  public stop() {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
   public speak(text: string, customRate?: number): Promise<void> {
     return new Promise((resolve) => {
       if (typeof window === 'undefined' || !window.speechSynthesis) {

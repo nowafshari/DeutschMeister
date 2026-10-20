@@ -104,10 +104,10 @@ export const WORDLE_WORDS: WordleWord[] = [
     exampleDe: 'Die Wohnung hat eine moderne Einbauküche.'
   },
   {
-    word: 'TASCHE',
-    translation: 'bag / pocket',
-    hint: 'Where you carry your wallet or keys (die Tasche).',
-    exampleDe: 'Ich habe mein Smartphone in der Tasche vergessen.'
+    word: 'TASSE',
+    translation: 'cup / mug',
+    hint: 'You drink coffee or tea from it (die Tasse).',
+    exampleDe: 'Möchten Sie eine Tasse Kaffee oder Tee?'
   },
   {
     word: 'GLÜCK',
@@ -144,5 +144,323 @@ export const WORDLE_WORDS: WordleWord[] = [
     translation: 'light',
     hint: 'What lamps emit (das Licht).',
     exampleDe: 'Bitte machen Sie das Licht an, es ist dunkel.'
+  },
+  {
+    word: 'APFEL',
+    translation: 'apple',
+    hint: 'A popular fruit (der Apfel). Example: Apfelschorle!',
+    exampleDe: 'Ich esse jeden Tag einen frischen Apfel.'
+  },
+  {
+    word: 'MILCH',
+    translation: 'milk',
+    hint: 'White dairy drink (die Milch). Coffee with milk = Milchkaffee.',
+    exampleDe: 'Trinken Sie Ihren Kaffee mit oder ohne Milch?'
+  },
+  {
+    word: 'MARKT',
+    translation: 'market',
+    hint: 'Where fresh vegetables and fruits are sold (der Wochenmarkt).',
+    exampleDe: 'Am Samstag gehe ich auf den Markt, um Gemüse zu kaufen.'
+  },
+  {
+    word: 'REISE',
+    translation: 'journey / trip / travel',
+    hint: 'Going somewhere for vacation or work (die Reise). Gute Reise!',
+    exampleDe: 'Wir planen eine gemeinsame Reise nach Berlin.'
+  },
+  {
+    word: 'KRAFT',
+    translation: 'strength / power',
+    hint: 'Physical or mental energy (die Kraft).',
+    exampleDe: 'Sport gibt mir viel Kraft für den anstrengenden Alltag.'
+  },
+  {
+    word: 'STURM',
+    translation: 'storm',
+    hint: 'Strong violent wind and weather (der Sturm).',
+    exampleDe: 'Wegen des starken Sturms fielen viele Züge aus.'
+  },
+  {
+    word: 'STIFT',
+    translation: 'pen / pencil',
+    hint: 'Used to write on paper (der Stift / Kugelschreiber).',
+    exampleDe: 'Haben Sie einen Stift, damit ich das Formular unterschreiben kann?'
+  },
+  {
+    word: 'BLUME',
+    translation: 'flower',
+    hint: 'Colorful plant (die Blume, z.B. Rose oder Tulpe).',
+    exampleDe: 'Er bringt ihr einen schönen Strauß Blumen mit.'
+  },
+  {
+    word: 'RADIO',
+    translation: 'radio',
+    hint: 'You listen to news and music on it (das Radio).',
+    exampleDe: 'Im Auto höre ich morgens immer die Nachrichten im Radio.'
+  },
+  {
+    word: 'SPORT',
+    translation: 'sport / exercise',
+    hint: 'Physical activity (der Sport). \'Sport treiben\'.',
+    exampleDe: 'Regelmäßiger Sport ist sehr gesund für den Körper.'
+  },
+  {
+    word: 'SONNE',
+    translation: 'sun',
+    hint: 'It shines in the sky during summer (die Sonne).',
+    exampleDe: 'Heute scheint die Sonne und es ist angenehm warm.'
+  },
+  {
+    word: 'REGAL',
+    translation: 'shelf / bookcase',
+    hint: 'Furniture holding books or groceries (das Regal).',
+    exampleDe: 'Das Buch steht im oberen Regal im Wohnzimmer.'
+  },
+  {
+    word: 'LAMPE',
+    translation: 'lamp / light fixture',
+    hint: 'Provides light in a room (die Lampe).',
+    exampleDe: 'Die neue Lampe spendet ein sehr gemütliches Licht.'
+  },
+  {
+    word: 'SUPPE',
+    translation: 'soup',
+    hint: 'Warm liquid dish (die Suppe).',
+    exampleDe: 'Im Winter wärmt eine heiße Gemüsesuppe besonders gut.'
+  },
+  {
+    word: 'WURST',
+    translation: 'sausage',
+    hint: 'Classic German food (die Wurst, z.B. Currywurst).',
+    exampleDe: 'In Berlin probiert fast jeder Tourist eine Currywurst.'
+  },
+  {
+    word: 'FLUSS',
+    translation: 'river',
+    hint: 'Flowing body of water like Rhein or Elbe (der Fluss).',
+    exampleDe: 'Der Rhein ist ein sehr bedeutender Fluss in Deutschland.'
+  },
+  {
+    word: 'GLEIS',
+    translation: 'track / railway platform',
+    hint: 'Where the train arrives (das Gleis).',
+    exampleDe: 'Der Zug nach Köln fährt heute von Gleis 3 ab.'
+  },
+  {
+    word: 'MOTOR',
+    translation: 'motor / engine',
+    hint: 'The machine that powers a car (der Motor).',
+    exampleDe: 'Der Motor des Autos läuft sehr leise und sparsam.'
+  },
+  {
+    word: 'MUSIK',
+    translation: 'music',
+    hint: 'Songs, melodies and sounds (die Musik).',
+    exampleDe: 'Beim Kochen höre ich am liebsten klassische Musik.'
+  },
+  {
+    word: 'VOGEL',
+    translation: 'bird',
+    hint: 'Animal that flies and sings (der Vogel).',
+    exampleDe: 'Im Frühling hört man am frühen Morgen die Vögel singen.'
+  },
+  {
+    word: 'KATZE',
+    translation: 'cat',
+    hint: 'Popular pet that purrs (die Katze).',
+    exampleDe: 'Unsere Katze schläft den ganzen Nachmittag auf dem Sofa.'
+  },
+  {
+    word: 'HAFEN',
+    translation: 'port / harbor',
+    hint: 'Where ships dock, e.g. in Hamburg (der Hafen).',
+    exampleDe: 'Der Hamburger Hafen ist einer der größten Seehäfen Europas.'
+  },
+  {
+    word: 'WAGEN',
+    translation: 'car / carriage / wagon',
+    hint: 'Another word for car or train car (der Wagen).',
+    exampleDe: 'Unser Sitzplatz befindet sich in Wagen 24.'
+  },
+  {
+    word: 'BERGE',
+    translation: 'mountains',
+    hint: 'High peaks like the Alps (die Berge).',
+    exampleDe: 'Im Urlaub fahren wir zum Wandern in die Berge.'
+  },
+  {
+    word: 'BÄUME',
+    translation: 'trees',
+    hint: 'Tall plants in the forest or park (die Bäume, Singular: der Baum).',
+    exampleDe: 'Im Herbst verlieren die Bäume ihre bunten Blätter.'
+  },
+  {
+    word: 'FEUER',
+    translation: 'fire',
+    hint: 'It burns and provides heat (das Feuer). Emergency: Feuer!',
+    exampleDe: 'Im Winter brennt im Kamin ein gemütliches Feuer.'
+  },
+  {
+    word: 'STERN',
+    translation: 'star',
+    hint: 'Shining object in the night sky (der Stern).',
+    exampleDe: 'In einer klaren Nacht sieht man Tausende Sterne.'
+  },
+  {
+    word: 'WOLKE',
+    translation: 'cloud',
+    hint: 'White or grey shape in the sky (die Wolke).',
+    exampleDe: 'Am blauen Himmel ist keine einzige Wolke zu sehen.'
+  },
+  {
+    word: 'KLEID',
+    translation: 'dress',
+    hint: 'Piece of women\'s clothing (das Kleid).',
+    exampleDe: 'Sie trägt zur feierlichen Hochzeit ein elegantes Kleid.'
+  },
+  {
+    word: 'SCHUH',
+    translation: 'shoe',
+    hint: 'Footwear (der Schuh, Plural: die Schuhe).',
+    exampleDe: 'In der Wohnung zieht man in Deutschland oft die Schuhe aus.'
+  },
+  {
+    word: 'JACKE',
+    translation: 'jacket / coat',
+    hint: 'Worn when it is chilly outside (die Jacke).',
+    exampleDe: 'Zieh eine warme Jacke an, draußen weht ein kalter Wind.'
+  },
+  {
+    word: 'ANZUG',
+    translation: 'suit (clothing)',
+    hint: 'Formal jacket and trousers worn to office or interviews (der Anzug).',
+    exampleDe: 'Zum Vorstellungsgespräch trägt er einen dunklen Anzug.'
+  },
+  {
+    word: 'PAKET',
+    translation: 'parcel / package',
+    hint: 'Cardboard box delivered by post (das Paket).',
+    exampleDe: 'Ich habe heute ein wichtiges Paket von der Post abgeholt.'
+  },
+  {
+    word: 'BOHNE',
+    translation: 'bean',
+    hint: 'Legume or coffee bean (die Kaffeebohne).',
+    exampleDe: 'Frisch gemahlene Kaffeebohnen duften herrlich.'
+  },
+  {
+    word: 'HONIG',
+    translation: 'honey',
+    hint: 'Sweet golden syrup made by bees (der Honig).',
+    exampleDe: 'Ich trinke gerne heißen Tee mit einem Löffel Honig.'
+  },
+  {
+    word: 'SALAT',
+    translation: 'salad / lettuce',
+    hint: 'Healthy vegetable dish (der Salat).',
+    exampleDe: 'Zu Mittag esse ich einen knackigen grünen Salat.'
+  },
+  {
+    word: 'ESSEN',
+    translation: 'food / meal',
+    hint: 'What you eat (das Essen). \'Guten Appetit beim Essen!\'',
+    exampleDe: 'Das traditionelle Essen in diesem Gasthaus schmeckt hervorragend.'
+  },
+  {
+    word: 'FEIER',
+    translation: 'celebration / party',
+    hint: 'Festive event like a birthday or wedding (die Feier).',
+    exampleDe: 'Wir laden alle Nachbarn zu unserer kleinen Feier ein.'
+  },
+  {
+    word: 'SPIEL',
+    translation: 'game / match',
+    hint: 'Board game or football match (das Spiel).',
+    exampleDe: 'Heute Abend schauen wir gemeinsam das wichtige Fußballspiel.'
+  },
+  {
+    word: 'STÜCK',
+    translation: 'piece / slice',
+    hint: 'A portion of cake or music (das Stück).',
+    exampleDe: 'Möchten Sie noch ein Stück leckeren Apfelkuchen?'
+  },
+  {
+    word: 'PUNKT',
+    translation: 'point / dot / period',
+    hint: 'Punctuation mark or score (der Punkt). Also: Pünktlich!',
+    exampleDe: 'In Deutschland ist Pünktlichkeit ein sehr wichtiger Punkt.'
+  },
+  {
+    word: 'WOCHE',
+    translation: 'week',
+    hint: 'Seven days from Monday to Sunday (die Woche).',
+    exampleDe: 'Nächste Woche beginne ich meinen neuen Sprachkurs.'
+  },
+  {
+    word: 'HEUTE',
+    translation: 'today',
+    hint: 'The current day (heute). \'Was machen wir heute?\'',
+    exampleDe: 'Heute haben wir wunderbares sonniges Frühlingswetter.'
+  },
+  {
+    word: 'GRUND',
+    translation: 'reason / cause / foundation',
+    hint: 'Why something happens (der Grund). \'Aus welchem Grund?\'',
+    exampleDe: 'Der Grund für meine Verspätung war ein Zugausfall.'
+  },
+  {
+    word: 'VATER',
+    translation: 'father',
+    hint: 'Male parent (der Vater).',
+    exampleDe: 'Mein Vater geht jeden Sonntag im Park spazieren.'
+  },
+  {
+    word: 'ONKEL',
+    translation: 'uncle',
+    hint: 'Brother of your father or mother (der Onkel).',
+    exampleDe: 'Mein Onkel wohnt seit vielen Jahren in Hamburg.'
+  },
+  {
+    word: 'TANTE',
+    translation: 'aunt',
+    hint: 'Sister of your father or mother (die Tante).',
+    exampleDe: 'Meine Tante backt den besten Schokoladenkuchen der Welt.'
+  },
+  {
+    word: 'ENKEL',
+    translation: 'grandchild / grandson',
+    hint: 'Child of your son or daughter (der Enkel).',
+    exampleDe: 'Die Großeltern spielen gerne mit ihrem kleinen Enkel.'
+  },
+  {
+    word: 'LEUTE',
+    translation: 'people',
+    hint: 'Group of humans (die Leute). \'Hallo Leute!\'',
+    exampleDe: 'In Berlin trifft man Menschen und Leute aus der ganzen Welt.'
+  },
+  {
+    word: 'FARBE',
+    translation: 'color / paint',
+    hint: 'Red, blue, green... (die Farbe).',
+    exampleDe: 'Welche Farbe gefällt Ihnen für das Wohnzimmer am besten?'
+  },
+  {
+    word: 'THEMA',
+    translation: 'topic / subject',
+    hint: 'Subject of a discussion or exam (das Thema).',
+    exampleDe: 'Das Thema der heutigen Unterrichtsstunde ist der Umweltschutz.'
+  },
+  {
+    word: 'REGEL',
+    translation: 'rule / regulation',
+    hint: 'Grammar rule or house rule (die Regel).',
+    exampleDe: 'Im Deutschen gibt es viele nützliche Regeln für die Artikel.'
+  },
+  {
+    word: 'SACHE',
+    translation: 'thing / matter / item',
+    hint: 'An object or affair (die Sache). \'Das ist meine Sache!\'',
+    exampleDe: 'Pack deine Sachen, wir müssen pünktlich zum Bahnhof!'
   }
 ];

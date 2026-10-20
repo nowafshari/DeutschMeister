@@ -80,7 +80,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
           {/* Speed Selector */}
           <div className="hidden md:flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-700 text-xs text-slate-300 font-medium">
             <span className="text-slate-400 mr-1">Tempo:</span>
-            {[0.8, 1.0].map(rate => (
+            {[
+              { rate: 0.75, label: '0.75x 🐢' },
+              { rate: 0.9, label: '0.9x' },
+              { rate: 1.0, label: '1.0x' }
+            ].map(({ rate, label }) => (
               <button
                 key={rate}
                 onClick={() => setSpeechRate(rate)}
@@ -90,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {rate}x
+                {label}
               </button>
             ))}
           </div>

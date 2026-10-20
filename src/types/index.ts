@@ -8,7 +8,10 @@ export type DeckCategory =
   | 'bureaucracy'
   | 'work'
   | 'finance'
-  | 'dtz';
+  | 'dtz'
+  | 'health'
+  | 'housing'
+  | 'transit';
 
 export interface Card {
   id: string;
@@ -57,6 +60,7 @@ export interface UserProgress {
   srs: Record<string, SRSCardState>;
   soundEnabled: boolean;
   speechRate: number;
+  selectedVoiceURI?: string | null;
 }
 
 export interface ArticleGameItem {

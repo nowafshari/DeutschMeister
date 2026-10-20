@@ -42,7 +42,8 @@ const INITIAL_PROGRESS: UserProgress = {
   achievements: {},
   srs: {},
   soundEnabled: true,
-  speechRate: 0.9
+  speechRate: 0.9,
+  selectedVoiceURI: null
 };
 
 interface ProgressContextType {
@@ -52,6 +53,9 @@ interface ProgressContextType {
   recordGamePlayed: (gameType: 'blitz' | 'wordle' | 'scramble' | 'dialogue' | 'letter', score?: number) => void;
   toggleSound: () => void;
   setSpeechRate: (rate: number) => void;
+  setSelectedVoice: (voiceURI: string | null) => void;
+  exportProgress: () => void;
+  importProgress: (jsonString: string) => { success: boolean; message: string };
   resetProgress: () => void;
   getXpForNextLevel: () => { current: number; max: number; percentage: number };
 }
@@ -88,6 +92,9 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
     soundEngine.setSoundEnabled(progress.soundEnabled);
     soundEngine.setSpeechRate(progress.speechRate);
+    if (progress.selectedVoiceURI) {
+      soundEngine.setSelectedVoiceURI(progress.selectedVoiceURI);
+    }
   }, [progress]);
 
   const calculateLevel = (xp: number): number => {
@@ -274,6 +281,51 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setProgress(prev => ({ ...prev, speechRate: rate }));
   };
 
+  const setSelectedVoice = (voiceURI: string | null) => {
+    setProgress(prev => ({ ...prev, selectedVoiceURI: voiceURI }));
+    soundEngine.setSelectedVoiceURI(voiceURI);
+  };
+
+  const exportProgress = () => {
+    try {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(progress, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      const dateStr = new Date().toISOString().slice(0, 10);
+      downloadAnchor.setAttribute("download", `deutschmeister_backup_${dateStr}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      soundEngine.playSuccessSound();
+    } catch {
+      alert('Export fehlgeschlagen.');
+    }
+  };
+
+  const importProgress = (jsonString: string): { success: boolean; message: string } => {
+    try {
+      const parsed = JSON.parse(jsonString);
+      if (typeof parsed !== 'object' || parsed === null) {
+        return { success: false, message: 'Ungültige JSON-Datei.' };
+      }
+      if (typeof parsed.xp !== 'number') {
+        return { success: false, message: 'Ungültiges Datenformat: XP fehlt.' };
+      }
+      const restored: UserProgress = {
+        ...INITIAL_PROGRESS,
+        ...parsed,
+        level: calculateLevel(parsed.xp || 0),
+        lastActiveDate: new Date().toISOString().slice(0, 10)
+      };
+      setProgress(restored);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(restored));
+      soundEngine.playLevelUpSound();
+      return { success: true, message: `Erfolgreich wiederhergestellt: Level ${restored.level}, ${restored.xp} XP!` };
+    } catch {
+      return { success: false, message: 'JSON konnte nicht analysiert werden.' };
+    }
+  };
+
   const resetProgress = () => {
     if (confirm('Möchtest du wirklich deinen gesamten Fortschritt und alle Level zurücksetzen?')) {
       setProgress(INITIAL_PROGRESS);
@@ -289,6 +341,9 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       recordGamePlayed,
       toggleSound,
       setSpeechRate,
+      setSelectedVoice,
+      exportProgress,
+      importProgress,
       resetProgress,
       getXpForNextLevel
     }}>

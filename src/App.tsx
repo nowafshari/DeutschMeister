@@ -8,6 +8,8 @@ import { SentenceScramble } from './components/SentenceScramble';
 import { DialogueSimulator } from './components/DialogueSimulator';
 import { FlashcardsView } from './components/FlashcardsView';
 import { DTZExamLab } from './components/DTZExamLab';
+import { ListeningQuiz } from './components/ListeningQuiz';
+import { FormularTrainer } from './components/FormularTrainer';
 import { GrammarHandbook } from './components/GrammarHandbook';
 import { getTabFromUrl, syncUrlAndTitle } from './utils/navigation';
 
@@ -50,6 +52,8 @@ export function AppContent() {
         {currentTab === 'dialogue' && <DialogueSimulator />}
         {currentTab === 'flashcards' && <FlashcardsView />}
         {currentTab === 'dtz' && <DTZExamLab />}
+        {currentTab === 'listening' && <ListeningQuiz />}
+        {currentTab === 'forms' && <FormularTrainer />}
         {currentTab === 'grammar' && <GrammarHandbook />}
       </main>
 

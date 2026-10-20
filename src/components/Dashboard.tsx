@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useProgress, ACHIEVEMENTS_LIST, LEVEL_TITLES } from '../context/ProgressContext';
 import { VOCABULARY_CARDS } from '../data/vocabulary';
 import { 
   Flame, Sparkles, Zap, MessageSquare, Layers, 
   GraduationCap, Volume2, Award, ChevronRight, CheckCircle2,
-  BookOpen, HelpCircle
+  BookOpen, HelpCircle, Headphones, Landmark, Download, Upload,
+  Settings, AlertTriangle
 } from 'lucide-react';
 import { soundEngine } from '../utils/audio';
 import { getCleanNoun, getSpokenPhrase } from '../utils/wordFormatting';
@@ -14,9 +15,48 @@ interface DashboardProps {
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ setCurrentTab }) => {
-  const { progress, getXpForNextLevel, resetProgress } = useProgress();
+  const { 
+    progress, getXpForNextLevel, resetProgress, 
+    setSelectedVoice, exportProgress, importProgress, setSpeechRate 
+  } = useProgress();
   const xpInfo = getXpForNextLevel();
   const currentTitle = LEVEL_TITLES[progress.level - 1] || 'Deutsch-Meister';
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [importNotice, setImportNotice] = useState<{ text: string; isError: boolean } | null>(null);
+
+  useEffect(() => {
+    const loadVoices = () => {
+      const v = soundEngine.getAvailableGermanVoices();
+      setAvailableVoices(v);
+    };
+    loadVoices();
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+      return () => {
+        window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+      };
+    }
+  }, []);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      if (content) {
+        const res = importProgress(content);
+        setImportNotice({ text: res.message, isError: !res.success });
+        setTimeout(() => setImportNotice(null), 5000);
+      }
+    };
+    reader.readAsText(file);
+    // Reset file input so same file can be uploaded again if needed
+    e.target.value = '';
+  };
 
   // Deterministic Word of the Day based on day of year
   const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
@@ -56,12 +96,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ setCurrentTab }) => {
       icon: MessageSquare
     },
     {
+      id: 'listening',
+      title: 'Hör-Quiz (DTZ)',
+      subtitle: 'Ansagen, Durchsagen & Telefonate verstehen',
+      badge: 'DTZ Hören',
+      color: 'from-teal-500 to-cyan-600',
+      icon: Headphones
+    },
+    {
       id: 'dtz',
       title: 'DTZ-Prüfungslabor',
       subtitle: 'Sprechen (Teil 1-3) & Briefe schreiben',
       badge: 'A2-B1 Zertifikat',
       color: 'from-purple-500 to-violet-600',
       icon: GraduationCap
+    },
+    {
+      id: 'forms',
+      title: 'Formular-Trainer',
+      subtitle: 'Anmeldung, Vermieterbescheinigung & Anträge',
+      badge: 'Behörden-Deutsch',
+      color: 'from-amber-600 to-orange-700',
+      icon: Landmark
     },
     {
       id: 'flashcards',
@@ -340,6 +396,132 @@ export const Dashboard: React.FC<DashboardProps> = ({ setCurrentTab }) => {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Settings, Voice & Data Backup Section */}
+      <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-6">
+        <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+          <Settings className="w-5 h-5 text-cyan-400" />
+          <h2 className="text-lg font-bold text-white">Einstellungen, Stimme & Daten-Sicherung</h2>
+        </div>
+
+        {importNotice && (
+          <div className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-2 ${
+            importNotice.isError 
+              ? 'bg-rose-950/40 border border-rose-500/50 text-rose-200' 
+              : 'bg-emerald-950/40 border border-emerald-500/50 text-emerald-200'
+          }`}>
+            {importNotice.isError ? <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" /> : <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
+            <span>{importNotice.text}</span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* German System Voice Picker & Speed */}
+          <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-400 block mb-1">
+                Deutsche Sprachausgabe (TTS):
+              </span>
+              <p className="text-xs text-slate-400">
+                Wähle die installierte deutsche Systemstimme deines Browsers für Ausspracheübungen.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-300 block">Stimme:</label>
+              <select
+                value={progress.selectedVoiceURI || ''}
+                onChange={(e) => {
+                  const uri = e.target.value || null;
+                  setSelectedVoice(uri);
+                  soundEngine.setSelectedVoiceURI(uri);
+                }}
+                className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-2.5 focus:border-amber-500 outline-none"
+              >
+                <option value="">Standard-Stimme (Automatisch Deutsch)</option>
+                {availableVoices.map(voice => (
+                  <option key={voice.voiceURI} value={voice.voiceURI}>
+                    {voice.name} ({voice.lang})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Voice Test & Speed Selection */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-slate-400">Tempo:</span>
+                {[
+                  { r: 0.75, l: '🐢 0.75x' },
+                  { r: 0.9, l: '0.9x' },
+                  { r: 1.0, l: '1.0x' }
+                ].map(({ r, l }) => (
+                  <button
+                    key={r}
+                    onClick={() => setSpeechRate(r)}
+                    className={`px-2 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                      progress.speechRate === r
+                        ? 'bg-amber-500 text-slate-950 font-bold'
+                        : 'bg-slate-900 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  soundEngine.speak('Hallo! Ich bin Ihre deutsche Lernstimme auf DeutschMeister.');
+                }}
+                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-400 hover:text-amber-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+                <span>Stimme testen</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Backup Export & Import (JSON) */}
+          <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4 flex flex-col justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 block mb-1">
+                Fortschritts-Sicherung (100% Offline):
+              </span>
+              <p className="text-xs text-slate-400">
+                Lade deinen gesamten Lernstand (XP, Level, Streak, wiederholte Karteikarten) als Datei herunter oder stelle ihn auf einem anderen Gerät wieder her.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              {/* Export Button */}
+              <button
+                onClick={exportProgress}
+                className="flex-1 py-2.5 px-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-cyan-950/40 transition-transform active:scale-95"
+              >
+                <Download className="w-4 h-4" />
+                <span>Backup herunterladen</span>
+              </button>
+
+              {/* Import Button */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="flex-1 py-2.5 px-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition-transform active:scale-95"
+              >
+                <Upload className="w-4 h-4 text-slate-400" />
+                <span>Backup wiederherstellen</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

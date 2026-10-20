@@ -121,16 +121,29 @@ export const FlashcardsView: React.FC = () => {
                 <span>{isFlipped ? 'Rückseite (Erklärung)' : 'Vorderseite (Klicken zum Umdrehen)'}</span>
               </span>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  soundEngine.speak(getSpokenPhrase(currentCard));
-                }}
-                className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white transition-colors"
-                title="Wort anhören"
-              >
-                <Volume2 className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    soundEngine.speak(getSpokenPhrase(currentCard), 0.72);
+                  }}
+                  className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 text-xs font-semibold flex items-center gap-1 transition-colors"
+                  title="Langsam anhören (0.75x Schildkröte)"
+                >
+                  <span>🐢</span>
+                  <span className="text-[10px]">0.75x</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    soundEngine.speak(getSpokenPhrase(currentCard));
+                  }}
+                  className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white transition-colors"
+                  title="Wort anhören"
+                >
+                  <Volume2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Front Center Word */}

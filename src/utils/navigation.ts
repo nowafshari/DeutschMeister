@@ -57,6 +57,20 @@ export const TABS: TabItem[] = [
     aliases: ['dtz', 'dtz-labor', 'exam', 'briefe', 'sprechen']
   },
   {
+    id: 'listening',
+    slug: 'hoer-quiz',
+    label: '🎧 Hör-Quiz',
+    title: 'Hör-Quiz (DTZ Hörverstehen) | DeutschMeister',
+    aliases: ['listening', 'hoeren', 'hoer-quiz', 'audio', 'ansagen']
+  },
+  {
+    id: 'forms',
+    slug: 'formulare',
+    label: '📄 Formulare',
+    title: 'Formular-Trainer (Behörden-Deutsch) | DeutschMeister',
+    aliases: ['forms', 'formulare', 'anmeldung', 'antrag', 'behoerde']
+  },
+  {
     id: 'grammar',
     slug: 'grammatik',
     label: '📖 Grammatik',
