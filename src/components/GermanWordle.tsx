@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { WORDLE_WORDS } from '../data/wordleWords';
 import type { WordleWord } from '../types';
-import { HelpCircle, Volume2, RotateCcw, Sparkles } from 'lucide-react';
+import { 
+  HelpCircle, Volume2, RotateCcw, Sparkles, 
+  ChevronDown, ChevronUp, Lightbulb, CheckCircle2,
+  BookOpen
+} from 'lucide-react';
 import { soundEngine } from '../utils/audio';
 
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
-export const GermanWordle: React.FC = () => {
+export const GermanWordle = () => {
   const { addXp, recordGamePlayed } = useProgress();
 
   const [targetItem, setTargetItem] = useState<WordleWord>(() => {
@@ -18,7 +22,9 @@ export const GermanWordle: React.FC = () => {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>('');
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
-  const [showHint, setShowHint] = useState<boolean>(false);
+  const [showInstructions, setShowInstructions] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(true); // Default ON for language learners!
+  const [revealedLetter, setRevealedLetter] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
 
   const targetWord = targetItem.word.toUpperCase();
@@ -32,7 +38,7 @@ export const GermanWordle: React.FC = () => {
     setGuesses([]);
     setCurrentGuess('');
     setGameStatus('playing');
-    setShowHint(false);
+    setRevealedLetter(false);
     setMessage('');
     soundEngine.playClickSound();
   };
@@ -42,8 +48,8 @@ export const GermanWordle: React.FC = () => {
 
     if (key === 'ENTER') {
       if (currentGuess.length !== WORD_LENGTH) {
-        setMessage('Das Wort muss genau 5 Buchstaben haben!');
-        setTimeout(() => setMessage(''), 2000);
+        setMessage(`Noch ${WORD_LENGTH - currentGuess.length} Buchstaben nötig! (Genau 5 Buchstaben)`);
+        setTimeout(() => setMessage(''), 2500);
         soundEngine.playErrorSound();
         return;
       }
@@ -75,6 +81,9 @@ export const GermanWordle: React.FC = () => {
   // Keyboard listener
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      // Don't capture when typing in inputs/textareas
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
       if (e.key === 'Enter') {
         handleKeyPress('ENTER');
       } else if (e.key === 'Backspace') {
@@ -90,13 +99,13 @@ export const GermanWordle: React.FC = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [handleKeyPress]);
 
-  // Determine letter status for keyboard & tiles
+  // Determine tile color status
   const getLetterStatus = (letter: string, index: number) => {
     if (targetWord[index] === letter) {
-      return 'bg-emerald-600 border-emerald-500 text-white';
+      return 'bg-emerald-600 border-emerald-500 text-white shadow-emerald-950/40';
     }
     if (targetWord.includes(letter)) {
-      return 'bg-amber-600 border-amber-500 text-white';
+      return 'bg-amber-600 border-amber-500 text-white shadow-amber-950/40';
     }
     return 'bg-slate-800 border-slate-700 text-slate-400';
   };
@@ -106,13 +115,22 @@ export const GermanWordle: React.FC = () => {
     for (const g of guesses) {
       for (let i = 0; i < g.length; i++) {
         if (g[i] === char) {
-          if (targetWord[i] === char) return 'bg-emerald-600 text-white';
-          if (targetWord.includes(char)) status = 'bg-amber-600 text-white';
-          else if (!status) status = 'bg-slate-800 text-slate-500';
+          if (targetWord[i] === char) return 'bg-emerald-600 text-white border-emerald-500';
+          if (targetWord.includes(char)) status = 'bg-amber-600 text-white border-amber-500';
+          else if (!status) status = 'bg-slate-900 text-slate-600 border-slate-800 opacity-60';
         }
       }
     }
-    return status || 'bg-slate-800/80 hover:bg-slate-700 text-slate-200';
+    return status || 'bg-slate-800/90 hover:bg-slate-700 text-slate-100 border-slate-700';
+  };
+
+  const handleRevealFirstLetter = () => {
+    if (revealedLetter) return;
+    setRevealedLetter(true);
+    soundEngine.playClickSound();
+    if (currentGuess.length === 0) {
+      setCurrentGuess(targetWord[0]);
+    }
   };
 
   const keyboardRows = [
@@ -122,45 +140,114 @@ export const GermanWordle: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
-      {/* Header Bar */}
-      <div className="flex items-center justify-between">
+    <div className="max-w-xl mx-auto px-4 py-8 space-y-5">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-black text-white flex items-center gap-2">
             <HelpCircle className="w-6 h-6 text-emerald-400" />
             Wort-Rätsel
           </h1>
           <p className="text-xs text-slate-400">
-            Errate das deutsche 5-Buchstaben-Wort in maximal 6 Versuchen
+            Finde das deutsche 5-Buchstaben-Wort in maximal 6 Versuchen
           </p>
         </div>
 
-        <button
-          onClick={() => setShowHint(!showHint)}
-          className="text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 flex items-center gap-1.5 transition-colors"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>{showHint ? 'Hinweis verbergen' : 'Hinweis anzeigen'}</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={() => setShowInstructions(!showInstructions)}
+            className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Regeln</span>
+            {showInstructions ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </button>
+
+          <button
+            onClick={() => setShowHint(!showHint)}
+            className={`text-xs font-semibold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-all ${
+              showHint 
+                ? 'bg-amber-500/20 border-amber-500/40 text-amber-300' 
+                : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+            }`}
+          >
+            <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+            <span>{showHint ? 'Tipp an' : 'Tipp aus'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Optional Hint Box */}
-      {showHint && (
-        <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-800/40 text-xs text-amber-200 space-y-1 animate-in fade-in">
-          <span className="font-bold">Hinweis zur Bedeutung: </span>
-          <span>{targetItem.hint} ({targetItem.translation})</span>
+      {/* Collapsible How-To-Play Guide */}
+      {showInstructions && (
+        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs text-slate-300 space-y-3 animate-in fade-in">
+          <div className="font-bold text-white text-sm flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>So funktioniert das Spiel:</span>
+          </div>
+          <ol className="list-decimal list-inside space-y-1 text-slate-300">
+            <li>Tippe ein deutsches Wort mit <strong>5 Buchstaben</strong> ein.</li>
+            <li>Drücke auf <strong className="text-emerald-400">ENTER ⏎</strong> zum Prüfen.</li>
+            <li>Die Kacheln ändern ihre Farbe und geben dir Feedback:</li>
+          </ol>
+
+          {/* Color Legend */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-emerald-200">
+              <div className="w-6 h-6 rounded bg-emerald-600 font-bold flex items-center justify-center text-white shrink-0">A</div>
+              <span className="text-[11px]"><strong>Grün:</strong> Buchstabe ist an der <strong>richtigen</strong> Stelle.</span>
+            </div>
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-amber-950/40 border border-amber-800/40 text-amber-200">
+              <div className="w-6 h-6 rounded bg-amber-600 font-bold flex items-center justify-center text-white shrink-0">B</div>
+              <span className="text-[11px]"><strong>Gelb:</strong> Im Wort, aber an <strong>anderer</strong> Stelle.</span>
+            </div>
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400">
+              <div className="w-6 h-6 rounded bg-slate-800 font-bold flex items-center justify-center text-slate-500 shrink-0">C</div>
+              <span className="text-[11px]"><strong>Grau:</strong> Kommt im Wort <strong>gar nicht</strong> vor.</span>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Error Message Toast */}
+      {/* Prominent Clue / Riddle Box (Learner Friendly) */}
+      {showHint && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/30 via-slate-900 to-amber-950/20 border border-amber-500/30 text-xs space-y-1.5 shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-amber-400 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+              <Lightbulb className="w-3.5 h-3.5" />
+              <span>Rätsel-Hinweis (Bedeutung):</span>
+            </span>
+            {!revealedLetter && gameStatus === 'playing' && (
+              <button
+                onClick={handleRevealFirstLetter}
+                className="text-[11px] text-amber-300 hover:text-white underline font-medium"
+              >
+                🃏 1. Buchstaben aufdecken
+              </button>
+            )}
+          </div>
+          <div className="text-sm font-bold text-white">
+            "{targetItem.translation}"
+          </div>
+          <div className="text-slate-300 text-xs">
+            {targetItem.hint}
+          </div>
+          {revealedLetter && (
+            <div className="text-[11px] font-bold text-emerald-400 pt-1">
+              💡 Joker-Tipp: Das Wort beginnt mit dem Buchstaben <span className="underline text-sm font-black">"{targetWord[0]}"</span>.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Error / Alert Message Toast */}
       {message && (
-        <div className="p-2.5 rounded-xl bg-rose-950/40 border border-rose-800 text-xs text-rose-300 text-center font-bold animate-bounce">
+        <div className="p-2.5 rounded-xl bg-rose-950/60 border border-rose-700 text-xs text-rose-200 text-center font-bold animate-bounce shadow-lg">
           {message}
         </div>
       )}
 
       {/* Grid: 6 rows of 5 tiles */}
-      <div className="grid grid-rows-6 gap-2 max-w-[320px] mx-auto">
+      <div className="space-y-2 max-w-[320px] mx-auto py-1">
         {Array.from({ length: MAX_GUESSES }).map((_, rowIndex) => {
           const isCurrentRow = rowIndex === guesses.length;
           const guess = guesses[rowIndex] || (isCurrentRow ? currentGuess : '');
@@ -173,13 +260,13 @@ export const GermanWordle: React.FC = () => {
                 const statusClass = isGuessedRow
                   ? getLetterStatus(letter, colIndex)
                   : letter
-                  ? 'border-slate-500 text-white bg-slate-900'
+                  ? 'border-emerald-500/60 text-white bg-slate-900 scale-105'
                   : 'border-slate-800 bg-slate-950/60 text-slate-500';
 
                 return (
                   <div
                     key={colIndex}
-                    className={`w-14 h-14 sm:w-14 sm:h-14 border-2 rounded-xl flex items-center justify-center font-black text-xl select-none transition-all duration-200 ${statusClass}`}
+                    className={`w-14 h-14 border-2 rounded-2xl flex items-center justify-center font-black text-2xl select-none transition-all duration-200 shadow-md ${statusClass}`}
                   >
                     {letter}
                   </div>
@@ -190,57 +277,90 @@ export const GermanWordle: React.FC = () => {
         })}
       </div>
 
-      {/* End Result Box */}
+      {/* Current Input Helper Indicator */}
+      {gameStatus === 'playing' && (
+        <div className="text-center text-xs text-slate-400">
+          {currentGuess.length === WORD_LENGTH ? (
+            <span className="text-emerald-400 font-bold animate-pulse">
+              ✓ 5 Buchstaben bereit! Klicke unten auf <span className="underline">ENTER ⏎</span> zum Prüfen!
+            </span>
+          ) : (
+            <span>
+              Buchstabe <strong className="text-white">{currentGuess.length}</strong> von 5 eingegeben
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* End Result Modal / Card */}
       {gameStatus !== 'playing' && (
-        <div className="p-5 rounded-3xl bg-slate-900 border border-slate-800 text-center space-y-4 shadow-xl">
-          <div className="space-y-1">
+        <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 text-center space-y-4 shadow-2xl animate-in zoom-in-95">
+          <div className="space-y-1.5">
+            <div className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-2 bg-slate-800">
+              {gameStatus === 'won' ? (
+                <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+              ) : (
+                <HelpCircle className="w-7 h-7 text-rose-400" />
+              )}
+            </div>
             <h3 className={`text-xl font-black ${gameStatus === 'won' ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {gameStatus === 'won' ? 'Glückwunsch! Richtig gelöst! 🎉' : 'Schade! Runde vorbei.'}
+              {gameStatus === 'won' ? 'Richtig erraten! Großartig! 🎉' : 'Runde vorbei!'}
             </h3>
             <p className="text-xs text-slate-300">
-              Das gesuchte Wort war: <strong className="text-white text-sm tracking-wide">{targetWord}</strong> ({targetItem.translation})
+              Das gesuchte Wort war: <strong className="text-white text-base font-black tracking-wider ml-1">{targetWord}</strong> ({targetItem.translation})
             </p>
           </div>
 
           {/* Example & Audio */}
-          <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800 text-left space-y-1">
+          <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-left space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Beispiel:</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Deutscher Beispielsatz:</span>
               <button
-                onClick={() => soundEngine.speak(targetItem.exampleDe)}
-                className="text-xs text-amber-400 hover:underline flex items-center gap-1"
+                onClick={() => soundEngine.speak(`${targetWord}. ${targetItem.exampleDe}`)}
+                className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-semibold"
               >
-                <Volume2 className="w-3.5 h-3.5" /> Anhören
+                <Volume2 className="w-4 h-4" /> Anhören
               </button>
             </div>
-            <p className="text-xs font-semibold text-slate-200">{targetItem.exampleDe}</p>
+            <p className="text-sm font-semibold text-slate-100">{targetItem.exampleDe}</p>
           </div>
 
           <button
             onClick={startNewGame}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 mx-auto shadow-lg shadow-teal-950/30 hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 mx-auto shadow-lg shadow-teal-950/40 hover:scale-105 active:scale-95 transition-all"
           >
             <RotateCcw className="w-4 h-4" />
-            <span>Nächstes Worträtsel</span>
+            <span>Nächstes Worträtsel spielen</span>
           </button>
         </div>
       )}
 
       {/* Virtual On-Screen Keyboard */}
-      <div className="space-y-1.5 select-none pt-2">
+      <div className="space-y-1.5 select-none pt-1">
         {keyboardRows.map((row, rIdx) => (
           <div key={rIdx} className="flex justify-center gap-1 sm:gap-1.5">
             {row.map(k => {
-              const isWide = k === 'ENTER' || k === 'DEL';
+              const isEnter = k === 'ENTER';
+              const isDel = k === 'DEL';
+              const isReadyForEnter = isEnter && currentGuess.length === WORD_LENGTH;
+
               return (
                 <button
                   key={k}
                   onClick={() => handleKeyPress(k)}
-                  className={`h-11 sm:h-12 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center border border-slate-700/50 transition-all active:scale-95 ${
-                    isWide ? 'px-2.5 sm:px-3 text-[11px] sm:text-xs' : 'w-8 sm:w-10'
-                  } ${getKeyStatus(k)}`}
+                  className={`h-11 sm:h-12 rounded-xl font-bold transition-all active:scale-95 shadow-sm border flex items-center justify-center ${
+                    isEnter
+                      ? `px-3 sm:px-4 text-xs ${
+                          isReadyForEnter
+                            ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-black animate-pulse shadow-emerald-950/40'
+                            : 'bg-slate-800 text-slate-300 border-slate-700'
+                        }`
+                      : isDel
+                      ? 'px-2.5 sm:px-3 text-xs bg-slate-800 text-slate-300 border-slate-700'
+                      : `w-8 sm:w-10 text-xs sm:text-sm ${getKeyStatus(k)}`
+                  }`}
                 >
-                  {k === 'DEL' ? '⌫' : k}
+                  {isDel ? '⌫' : isEnter ? 'ENTER ⏎' : k}
                 </button>
               );
             })}
