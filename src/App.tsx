@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ProgressProvider } from './context/ProgressContext';
 import { Navbar } from './components/Navbar';
 import { Dashboard } from './components/Dashboard';
@@ -9,16 +9,41 @@ import { DialogueSimulator } from './components/DialogueSimulator';
 import { FlashcardsView } from './components/FlashcardsView';
 import { DTZExamLab } from './components/DTZExamLab';
 import { GrammarHandbook } from './components/GrammarHandbook';
+import { getTabFromUrl, syncUrlAndTitle } from './utils/navigation';
 
 export function AppContent() {
-  const [currentTab, setCurrentTab] = useState<string>('dashboard');
+  const [currentTab, setCurrentTab] = useState<string>(() => getTabFromUrl());
+
+  const handleSelectTab = useCallback((tabId: string) => {
+    setCurrentTab(tabId);
+    syncUrlAndTitle(tabId);
+  }, []);
+
+  // Listen to browser Back / Forward buttons & Hash changes
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const detected = getTabFromUrl();
+      setCurrentTab(detected);
+      syncUrlAndTitle(detected, true);
+    };
+
+    // Sync on initial load
+    syncUrlAndTitle(currentTab, true);
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, [currentTab]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      <Navbar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <Navbar currentTab={currentTab} setCurrentTab={handleSelectTab} />
 
       <main className="flex-1 pb-16">
-        {currentTab === 'dashboard' && <Dashboard setCurrentTab={setCurrentTab} />}
+        {currentTab === 'dashboard' && <Dashboard setCurrentTab={handleSelectTab} />}
         {currentTab === 'blitz' && <ArticleBlitz />}
         {currentTab === 'wordle' && <GermanWordle />}
         {currentTab === 'scramble' && <SentenceScramble />}

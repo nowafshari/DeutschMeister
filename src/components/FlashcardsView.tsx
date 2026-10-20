@@ -6,6 +6,7 @@ import {
   BookOpen, Volume2, RotateCw, Lightbulb, Globe
 } from 'lucide-react';
 import { soundEngine } from '../utils/audio';
+import { getCleanNoun, getSpokenPhrase, getFullDisplayLabel } from '../utils/wordFormatting';
 
 export const FlashcardsView: React.FC = () => {
   const { recordCardReview } = useProgress();
@@ -123,7 +124,7 @@ export const FlashcardsView: React.FC = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  soundEngine.speak(`${currentCard.article || ''} ${currentCard.de}`);
+                  soundEngine.speak(getSpokenPhrase(currentCard));
                 }}
                 className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white transition-colors"
                 title="Wort anhören"
@@ -145,7 +146,7 @@ export const FlashcardsView: React.FC = () => {
                     </span>
                   )}
                   <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                    {currentCard.de}
+                    {getCleanNoun(currentCard)}
                   </h2>
                 </div>
 
@@ -160,7 +161,7 @@ export const FlashcardsView: React.FC = () => {
                 <div className="text-center space-y-1">
                   <h3 className="text-2xl font-extrabold text-white">{currentCard.en}</h3>
                   <div className="flex items-center justify-center gap-2 text-sm text-cyan-300 font-semibold">
-                    <span>{currentCard.article ? `${currentCard.article} ` : ''}{currentCard.de}</span>
+                    <span>{getFullDisplayLabel(currentCard)}</span>
                   </div>
                 </div>
 

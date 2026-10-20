@@ -7,6 +7,7 @@ import {
   BookOpen, HelpCircle
 } from 'lucide-react';
 import { soundEngine } from '../utils/audio';
+import { getCleanNoun, getSpokenPhrase } from '../utils/wordFormatting';
 
 interface DashboardProps {
   setCurrentTab: (tab: string) => void;
@@ -179,16 +180,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ setCurrentTab }) => {
 
           <div className="space-y-1">
             <div className="flex items-baseline gap-3">
-              <span className={`text-sm font-bold uppercase ${
-                wordOfTheDay.article === 'der' ? 'text-blue-400' :
-                wordOfTheDay.article === 'die' ? 'text-rose-400' :
-                wordOfTheDay.article === 'das' ? 'text-emerald-400' : 'text-slate-400'
-              }`}>
-                {wordOfTheDay.article || ''}
-              </span>
-              <h3 className="text-2xl font-black text-white tracking-tight">{wordOfTheDay.de}</h3>
+              {wordOfTheDay.article && (
+                <span className={`text-sm font-bold uppercase ${
+                  wordOfTheDay.article === 'der' ? 'text-blue-400' :
+                  wordOfTheDay.article === 'die' ? 'text-rose-400' :
+                  wordOfTheDay.article === 'das' ? 'text-emerald-400' : 'text-slate-400'
+                }`}>
+                  {wordOfTheDay.article}
+                </span>
+              )}
+              <h3 className="text-2xl font-black text-white tracking-tight">{getCleanNoun(wordOfTheDay)}</h3>
               <button
-                onClick={() => soundEngine.speak(`${wordOfTheDay.article || ''} ${wordOfTheDay.de}`)}
+                onClick={() => soundEngine.speak(getSpokenPhrase(wordOfTheDay))}
                 className="p-1.5 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white transition-colors"
                 title="Aussprache anhören"
               >

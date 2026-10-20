@@ -2,6 +2,7 @@ import React from 'react';
 import { useProgress, LEVEL_TITLES } from '../context/ProgressContext';
 import { Flame, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { soundEngine } from '../utils/audio';
+import { TABS } from '../utils/navigation';
 
 interface NavbarProps {
   currentTab: string;
@@ -12,17 +13,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
   const { progress, toggleSound, setSpeechRate, getXpForNextLevel } = useProgress();
   const xpInfo = getXpForNextLevel();
   const levelTitle = LEVEL_TITLES[progress.level - 1] || 'Deutsch-Meister';
-
-  const navItems = [
-    { id: 'dashboard', label: 'Übersicht' },
-    { id: 'blitz', label: '⚡ Artikel-Blitz' },
-    { id: 'wordle', label: '🧩 Wort-Rätsel' },
-    { id: 'scramble', label: '🧱 Satz-Meister' },
-    { id: 'dialogue', label: '💬 Dialoge' },
-    { id: 'flashcards', label: '🃏 Karteikarten' },
-    { id: 'dtz', label: '🎓 DTZ-Labor' },
-    { id: 'grammar', label: '📖 Grammatik' },
-  ];
 
   return (
     <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
@@ -110,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
       {/* Navigation Tabs Bar */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/60 overflow-x-auto no-scrollbar">
         <div className="flex space-x-1 sm:space-x-2 py-2 min-w-max">
-          {navItems.map(item => {
+          {TABS.map(item => {
             const isActive = currentTab === item.id;
             return (
               <button
