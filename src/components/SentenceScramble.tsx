@@ -72,36 +72,36 @@ export const SentenceScramble: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6">
       {/* Header Bar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <Layers className="w-6 h-6 text-blue-400" />
+          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <Layers className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
             Satz-Meister
           </h1>
-          <p className="text-xs text-slate-400">
-            Bringe die Satzglieder in die korrekte deutsche Reihenfolge (Satzbau)
+          <p className="text-[11px] sm:text-xs text-slate-400">
+            Bringe die Satzglieder in die korrekte Reihenfolge (Satzbau)
           </p>
         </div>
 
-        <div className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-          Satz {currentIndex + 1} von {SENTENCE_SCRAMBLE_ITEMS.length}
+        <div className="text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+          Satz {currentIndex + 1} / {SENTENCE_SCRAMBLE_ITEMS.length}
         </div>
       </div>
 
       {/* Target Translation Box */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 space-y-3 shadow-xl">
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-2 sm:space-y-3 shadow-xl">
         <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/20">
           Gesuchte Übersetzung:
         </span>
-        <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+        <h2 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-snug">
           "{currentItem.translationEn}"
         </h2>
       </div>
 
       {/* Drop Zone / Assembled Sentence Area */}
-      <div className="min-h-[110px] p-5 rounded-3xl bg-slate-950/80 border-2 border-dashed border-slate-800 flex flex-wrap items-center gap-2.5 transition-all">
+      <div className="min-h-[85px] sm:min-h-[110px] p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-950/80 border-2 border-dashed border-slate-800 flex flex-wrap items-center gap-2 sm:gap-2.5 transition-all">
         {selectedWords.length === 0 ? (
           <span className="text-xs sm:text-sm text-slate-500 italic select-none">
             Tippe unten auf die Wörter, um deinen Satz zu bauen...
@@ -111,7 +111,7 @@ export const SentenceScramble: React.FC = () => {
             <button
               key={idx}
               onClick={() => handleDeselectWord(word, idx)}
-              className="py-2 px-3.5 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-bold text-sm shadow-md shadow-indigo-950/40 transition-all hover:scale-105 active:scale-95 animate-in fade-in zoom-in-95 duration-150"
+              className="py-1.5 sm:py-2 px-2.5 sm:px-3.5 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-indigo-950/40 transition-all hover:scale-105 active:scale-95 touch-manipulation animate-in fade-in zoom-in-95 duration-150"
             >
               {word}
             </button>
@@ -120,14 +120,14 @@ export const SentenceScramble: React.FC = () => {
       </div>
 
       {/* Available Word Tiles Pool */}
-      <div className="p-5 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-3">
+      <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-900/60 border border-slate-800 space-y-2.5 sm:space-y-3">
         <span className="text-xs text-slate-400 font-medium">Verfügbare Wort-Karten:</span>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap gap-2 sm:gap-2.5">
           {availableWords.map((word, idx) => (
             <button
               key={idx}
               onClick={() => handleSelectWord(word, idx)}
-              className="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 text-slate-100 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm"
+              className="py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 text-slate-100 font-semibold text-xs sm:text-sm transition-all hover:scale-105 active:scale-95 shadow-sm touch-manipulation"
             >
               {word}
             </button>
@@ -136,10 +136,10 @@ export const SentenceScramble: React.FC = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-3">
         <button
           onClick={handleResetCurrent}
-          className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors touch-manipulation"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Zurücksetzen</span>
@@ -149,7 +149,7 @@ export const SentenceScramble: React.FC = () => {
           <button
             onClick={handleCheck}
             disabled={selectedWords.length === 0}
-            className={`px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all shadow-lg ${
+            className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all shadow-lg touch-manipulation ${
               selectedWords.length > 0
                 ? 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white shadow-indigo-950/40 hover:scale-105 active:scale-95'
                 : 'bg-slate-800 text-slate-500 cursor-not-allowed'
@@ -160,7 +160,7 @@ export const SentenceScramble: React.FC = () => {
         ) : (
           <button
             onClick={handleNext}
-            className="px-8 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-teal-950/40 hover:scale-105 active:scale-95 transition-all"
+            className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-teal-950/40 hover:scale-105 active:scale-95 transition-all touch-manipulation"
           >
             <span>Nächster Satz</span>
             <ArrowRight className="w-4 h-4" />

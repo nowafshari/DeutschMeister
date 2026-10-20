@@ -89,27 +89,27 @@ export const DialogueSimulator: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6">
       {/* Header Bar */}
       <div>
-        <h1 className="text-2xl font-black text-white flex items-center gap-2">
-          <MessageSquare className="w-6 h-6 text-rose-400" />
+        <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+          <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400" />
           Überlebens-Dialoge & Rollenspiel
         </h1>
-        <p className="text-xs text-slate-400">
+        <p className="text-[11px] sm:text-xs text-slate-400">
           Interaktive Konversationen für Alltag, Ämter und die DTZ-Prüfung
         </p>
       </div>
 
-      {/* Scenario Selector Pills */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Scenario Selector Pills: 2 cols on mobile, 4 on desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
         {DIALOGUE_SCENARIOS.map(sc => {
           const isActive = sc.id === activeScenarioId;
           return (
             <button
               key={sc.id}
               onClick={() => restartScenario(sc.id)}
-              className={`p-3 rounded-2xl border text-left transition-all ${
+              className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border text-left transition-all touch-manipulation ${
                 isActive
                   ? 'bg-rose-950/30 border-rose-500/50 shadow-lg shadow-rose-950/30'
                   : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 opacity-70 hover:opacity-100'
@@ -123,16 +123,16 @@ export const DialogueSimulator: React.FC = () => {
       </div>
 
       {/* Main Dialogue Chat Window */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-2xl">
         {/* Scenario Info Bar */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-3 sm:pb-4">
           <div>
-            <h2 className="text-lg font-bold text-white">{activeScenario.title}</h2>
-            <p className="text-xs text-slate-400">{activeScenario.description}</p>
+            <h2 className="text-base sm:text-lg font-bold text-white">{activeScenario.title}</h2>
+            <p className="text-[11px] sm:text-xs text-slate-400">{activeScenario.description}</p>
           </div>
           <button
             onClick={() => restartScenario()}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1.5 transition-colors"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1.5 transition-colors touch-manipulation"
             title="Szenario neu starten"
           >
             <RotateCcw className="w-3.5 h-3.5" />

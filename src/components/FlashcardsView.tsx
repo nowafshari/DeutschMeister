@@ -62,15 +62,15 @@ export const FlashcardsView: React.FC = () => {
         </p>
       </div>
 
-      {/* Deck Selector Pills */}
-      <div className="flex flex-wrap gap-2">
+      {/* Deck Selector Pills with Mobile Horizontal Scroll */}
+      <div className="flex gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap">
         {DECK_METADATA.map(d => {
           const isActive = d.id === selectedDeckId;
           return (
             <button
               key={d.id}
               onClick={() => handleDeckChange(d.id)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap touch-manipulation ${
                 isActive
                   ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-950/30'
                   : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
@@ -223,11 +223,11 @@ export const FlashcardsView: React.FC = () => {
             </div>
           )}
 
-          {/* SRS Rating Action Buttons */}
-          <div className="grid grid-cols-4 gap-2 sm:gap-4 pt-2">
+          {/* SRS Rating Action Buttons: 2x2 grid on mobile for finger-friendly tapping, 4 cols on desktop */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 pt-2">
             <button
               onClick={() => handleRate('again')}
-              className="py-3 px-2 rounded-2xl bg-rose-950/40 hover:bg-rose-900/50 border border-rose-800/60 text-rose-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95"
+              className="py-3 px-2 rounded-2xl bg-rose-950/40 hover:bg-rose-900/50 border border-rose-800/60 text-rose-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95 touch-manipulation"
             >
               <span>Nochmal</span>
               <span className="text-[10px] opacity-75 font-normal">&lt; 1 Tag (+2 XP)</span>
@@ -235,7 +235,7 @@ export const FlashcardsView: React.FC = () => {
 
             <button
               onClick={() => handleRate('hard')}
-              className="py-3 px-2 rounded-2xl bg-amber-950/40 hover:bg-amber-900/50 border border-amber-800/60 text-amber-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95"
+              className="py-3 px-2 rounded-2xl bg-amber-950/40 hover:bg-amber-900/50 border border-amber-800/60 text-amber-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95 touch-manipulation"
             >
               <span>Schwer</span>
               <span className="text-[10px] opacity-75 font-normal">2 Tage (+5 XP)</span>
@@ -243,7 +243,7 @@ export const FlashcardsView: React.FC = () => {
 
             <button
               onClick={() => handleRate('good')}
-              className="py-3 px-2 rounded-2xl bg-blue-950/40 hover:bg-blue-900/50 border border-blue-800/60 text-blue-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95"
+              className="py-3 px-2 rounded-2xl bg-blue-950/40 hover:bg-blue-900/50 border border-blue-800/60 text-blue-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95 touch-manipulation"
             >
               <span>Gut</span>
               <span className="text-[10px] opacity-75 font-normal">4 Tage (+10 XP)</span>
@@ -251,7 +251,7 @@ export const FlashcardsView: React.FC = () => {
 
             <button
               onClick={() => handleRate('easy')}
-              className="py-3 px-2 rounded-2xl bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-800/60 text-emerald-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95"
+              className="py-3 px-2 rounded-2xl bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-800/60 text-emerald-300 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition-all hover:scale-105 active:scale-95 touch-manipulation"
             >
               <span>Einfach</span>
               <span className="text-[10px] opacity-75 font-normal">7 Tage (+15 XP)</span>

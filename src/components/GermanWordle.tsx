@@ -140,15 +140,15 @@ export const GermanWordle = () => {
   ];
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8 space-y-5">
+    <div className="max-w-xl mx-auto px-2 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-5">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <HelpCircle className="w-6 h-6 text-emerald-400" />
+          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
             Wort-Rätsel
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-[11px] sm:text-xs text-slate-400">
             Finde das deutsche 5-Buchstaben-Wort in maximal 6 Versuchen
           </p>
         </div>
@@ -156,7 +156,7 @@ export const GermanWordle = () => {
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <button
             onClick={() => setShowInstructions(!showInstructions)}
-            className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
+            className="text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors"
           >
             <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
             <span>Regeln</span>
@@ -165,7 +165,7 @@ export const GermanWordle = () => {
 
           <button
             onClick={() => setShowHint(!showHint)}
-            className={`text-xs font-semibold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-all ${
+            className={`text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-xl border flex items-center gap-1.5 transition-all ${
               showHint 
                 ? 'bg-amber-500/20 border-amber-500/40 text-amber-300' 
                 : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
@@ -179,7 +179,7 @@ export const GermanWordle = () => {
 
       {/* Collapsible How-To-Play Guide */}
       {showInstructions && (
-        <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs text-slate-300 space-y-3 animate-in fade-in">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs text-slate-300 space-y-3 animate-in fade-in">
           <div className="font-bold text-white text-sm flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-amber-400" />
             <span>So funktioniert das Spiel:</span>
@@ -210,7 +210,7 @@ export const GermanWordle = () => {
 
       {/* Prominent Clue / Riddle Box (Learner Friendly) */}
       {showHint && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/30 via-slate-900 to-amber-950/20 border border-amber-500/30 text-xs space-y-1.5 shadow-md">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-amber-950/30 via-slate-900 to-amber-950/20 border border-amber-500/30 text-xs space-y-1.5 shadow-md">
           <div className="flex items-center justify-between">
             <span className="font-bold text-amber-400 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
               <Lightbulb className="w-3.5 h-3.5" />
@@ -228,7 +228,7 @@ export const GermanWordle = () => {
           <div className="text-sm font-bold text-white">
             "{targetItem.translation}"
           </div>
-          <div className="text-slate-300 text-xs">
+          <div className="text-slate-300 text-xs leading-relaxed">
             {targetItem.hint}
           </div>
           {revealedLetter && (
@@ -246,14 +246,14 @@ export const GermanWordle = () => {
         </div>
       )}
 
-      {/* Grid: 6 rows of 5 tiles */}
-      <div className="space-y-2 max-w-[320px] mx-auto py-1">
+      {/* Grid: 6 rows of 5 tiles (Responsive: fits 320px screens perfectly) */}
+      <div className="space-y-1.5 sm:space-y-2 max-w-[280px] sm:max-w-[320px] mx-auto py-1">
         {Array.from({ length: MAX_GUESSES }).map((_, rowIndex) => {
           const isCurrentRow = rowIndex === guesses.length;
           const guess = guesses[rowIndex] || (isCurrentRow ? currentGuess : '');
 
           return (
-            <div key={rowIndex} className="grid grid-cols-5 gap-2">
+            <div key={rowIndex} className="grid grid-cols-5 gap-1.5 sm:gap-2">
               {Array.from({ length: WORD_LENGTH }).map((_, colIndex) => {
                 const letter = guess[colIndex] || '';
                 const isGuessedRow = rowIndex < guesses.length;
@@ -266,7 +266,7 @@ export const GermanWordle = () => {
                 return (
                   <div
                     key={colIndex}
-                    className={`w-14 h-14 border-2 rounded-2xl flex items-center justify-center font-black text-2xl select-none transition-all duration-200 shadow-md ${statusClass}`}
+                    className={`w-12 h-12 sm:w-14 sm:h-14 border-2 rounded-xl sm:rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl select-none transition-all duration-200 shadow-md ${statusClass}`}
                   >
                     {letter}
                   </div>
@@ -294,7 +294,7 @@ export const GermanWordle = () => {
 
       {/* End Result Modal / Card */}
       {gameStatus !== 'playing' && (
-        <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 text-center space-y-4 shadow-2xl animate-in zoom-in-95">
+        <div className="p-5 sm:p-6 rounded-3xl bg-slate-900 border border-slate-800 text-center space-y-4 shadow-2xl animate-in zoom-in-95">
           <div className="space-y-1.5">
             <div className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center mb-2 bg-slate-800">
               {gameStatus === 'won' ? (
@@ -312,17 +312,17 @@ export const GermanWordle = () => {
           </div>
 
           {/* Example & Audio */}
-          <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-left space-y-1.5">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-left space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Deutscher Beispielsatz:</span>
               <button
                 onClick={() => soundEngine.speak(`${targetWord}. ${targetItem.exampleDe}`)}
                 className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-semibold"
               >
-                <Volume2 className="w-4 h-4" /> Anhören
+                <Volume2 className="w-3.5 h-3.5" /> Anhören
               </button>
             </div>
-            <p className="text-sm font-semibold text-slate-100">{targetItem.exampleDe}</p>
+            <p className="text-xs sm:text-sm font-semibold text-slate-100">{targetItem.exampleDe}</p>
           </div>
 
           <button
@@ -335,10 +335,10 @@ export const GermanWordle = () => {
         </div>
       )}
 
-      {/* Virtual On-Screen Keyboard */}
-      <div className="space-y-1.5 select-none pt-1">
+      {/* Virtual On-Screen Keyboard (Zero overflow on any mobile screen) */}
+      <div className="space-y-1.5 select-none pt-1 w-full max-w-md mx-auto px-0.5 sm:px-0">
         {keyboardRows.map((row, rIdx) => (
-          <div key={rIdx} className="flex justify-center gap-1 sm:gap-1.5">
+          <div key={rIdx} className="flex justify-center gap-1 sm:gap-1.5 w-full">
             {row.map(k => {
               const isEnter = k === 'ENTER';
               const isDel = k === 'DEL';
@@ -348,16 +348,16 @@ export const GermanWordle = () => {
                 <button
                   key={k}
                   onClick={() => handleKeyPress(k)}
-                  className={`h-11 sm:h-12 rounded-xl font-bold transition-all active:scale-95 shadow-sm border flex items-center justify-center ${
+                  className={`h-11 sm:h-12 rounded-lg sm:rounded-xl font-bold transition-all active:scale-95 shadow-sm border flex items-center justify-center touch-manipulation ${
                     isEnter
-                      ? `px-3 sm:px-4 text-xs ${
+                      ? `flex-[1.5] sm:flex-[1.6] min-w-[48px] max-w-[68px] text-[10px] sm:text-xs px-1 ${
                           isReadyForEnter
                             ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-black animate-pulse shadow-emerald-950/40'
                             : 'bg-slate-800 text-slate-300 border-slate-700'
                         }`
                       : isDel
-                      ? 'px-2.5 sm:px-3 text-xs bg-slate-800 text-slate-300 border-slate-700'
-                      : `w-8 sm:w-10 text-xs sm:text-sm ${getKeyStatus(k)}`
+                      ? 'flex-[1.1] sm:flex-[1.2] min-w-[36px] max-w-[48px] text-xs sm:text-sm px-1 bg-slate-800 text-slate-300 border-slate-700'
+                      : `flex-1 min-w-[24px] max-w-[38px] sm:max-w-[44px] text-xs sm:text-sm px-0 ${getKeyStatus(k)}`
                   }`}
                 >
                   {isDel ? '⌫' : isEnter ? 'ENTER ⏎' : k}

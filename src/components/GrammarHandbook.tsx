@@ -24,53 +24,53 @@ export const GrammarHandbook: React.FC = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <BookOpen className="w-6 h-6 text-indigo-400" />
+          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-400" />
             Grammatik-Spickzettel & Regeln
           </h1>
-          <p className="text-xs text-slate-400">
-            Das kompakte Nachschlagewerk für deutsche Artikelregeln, Präpositionen und Satzbau
+          <p className="text-[11px] sm:text-xs text-slate-400">
+            Kompaktes Nachschlagewerk für Artikelregeln, Präpositionen und Satzbau
           </p>
         </div>
 
-        {/* Tab switcher */}
-        <div className="flex p-1 rounded-xl bg-slate-900 border border-slate-800 self-start">
+        {/* Tab switcher: full width on mobile */}
+        <div className="w-full sm:w-auto grid grid-cols-3 sm:flex p-1 rounded-xl bg-slate-900 border border-slate-800">
           <button
             onClick={() => {
               soundEngine.playClickSound();
               setTab('gender');
             }}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-2 sm:px-3.5 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all text-center truncate touch-manipulation ${
               tab === 'gender' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Artikel (Der/Die/Das)
+            Artikel
           </button>
           <button
             onClick={() => {
               soundEngine.playClickSound();
               setTab('prepositions');
             }}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-2 sm:px-3.5 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all text-center truncate touch-manipulation ${
               tab === 'prepositions' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Wechselpräpositionen
+            Präpositionen
           </button>
           <button
             onClick={() => {
               soundEngine.playClickSound();
               setTab('connectors');
             }}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-2 sm:px-3.5 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all text-center truncate touch-manipulation ${
               tab === 'connectors' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Konnektoren (Satzbau)
+            Konnektoren
           </button>
         </div>
       </div>

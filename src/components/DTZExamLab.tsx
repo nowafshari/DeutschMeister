@@ -129,70 +129,70 @@ export const DTZExamLab: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-6">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <GraduationCap className="w-6 h-6 text-purple-400" />
+          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
             DTZ-Prüfungslabor (A2–B1)
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-[11px] sm:text-xs text-slate-400">
             Gezielte Vorbereitung auf den <strong>Deutsch-Test für Zuwanderer</strong> (Briefe & mündliche Prüfung)
           </p>
         </div>
 
-        {/* Sub-tab switcher */}
-        <div className="flex p-1 rounded-xl bg-slate-900 border border-slate-800 self-start">
+        {/* Sub-tab switcher: full width on mobile */}
+        <div className="w-full sm:w-auto grid grid-cols-2 sm:flex p-1 rounded-xl bg-slate-900 border border-slate-800">
           <button
             onClick={() => {
               soundEngine.playClickSound();
               setSubTab('writing');
             }}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 sm:px-4 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-center touch-manipulation ${
               subTab === 'writing'
                 ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Mail className="w-3.5 h-3.5" />
-            <span>Brief-Schreiber (Schreiben)</span>
+            <Mail className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Briefe (Schreiben)</span>
           </button>
           <button
             onClick={() => {
               soundEngine.playClickSound();
               setSubTab('speaking');
             }}
-            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 sm:px-4 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-center touch-manipulation ${
               subTab === 'speaking'
                 ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Mic className="w-3.5 h-3.5" />
-            <span>Sprechen-Trainer (Teil 1-3)</span>
+            <Mic className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Sprechen (Teil 1-3)</span>
           </button>
         </div>
       </div>
 
       {/* ===================== TAB 1: WRITING (BRIEF-SCHREIBER) ===================== */}
       {subTab === 'writing' && (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Prompt Selector Pills */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
             {DTZ_LETTER_PROMPTS.map(p => {
               const isActive = p.id === activePromptId;
               return (
                 <button
                   key={p.id}
                   onClick={() => handleSelectPrompt(p.id)}
-                  className={`p-3.5 rounded-2xl border text-left transition-all ${
+                  className={`p-3 sm:p-3.5 rounded-2xl border text-left transition-all touch-manipulation ${
                     isActive
                       ? 'bg-purple-950/30 border-purple-500/50 shadow-lg shadow-purple-950/30'
                       : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <span className={`text-[10px] font-bold uppercase tracking-wider block mb-1 ${
+                  <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wider block mb-0.5 sm:mb-1 ${
                     p.recipientType === 'formal' ? 'text-amber-400' : 'text-emerald-400'
                   }`}>
                     {p.recipientType === 'formal' ? 'Formell (Sie)' : 'Informell (Du/Ihr)'}
@@ -377,7 +377,7 @@ export const DTZExamLab: React.FC = () => {
           </div>
 
           {/* Current Part Content */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
+          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-xl">
             <div className="space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-0.5 rounded-full border border-purple-500/20">
                 {currentOralTopic.part}
